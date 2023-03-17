@@ -5,10 +5,9 @@
 
 let state;
 let snake;
-let apple;
 let move = 0;
 const game = document.getElementById("game_box");
-let numRan = Math.floor(Math.random() * 900);
+let apple = Math.floor(Math.random() * 900);
 
 
 
@@ -27,9 +26,8 @@ function gameLayout(){
         direction: [0],
     };
 
-    apple = numRan;
     const gridList = document.querySelectorAll("#game_box .grid_cell");
-    gridList[numRan].classList.add("apple");
+    gridList[apple].classList.add("apple");
 
 
 };
@@ -56,17 +54,16 @@ function moveSnake(){
 
 function growSnake(){
     if(snake.body[snake.body.length-1] == apple){
-        snake.direction = numRan;
+        snake.direction = apple;
         snake.direction += move;
     
         const gridList = document.querySelectorAll("#game_box .grid_cell");
         gridList[snake.body[snake.body.length-1]].classList.add("snake");
-        gridList[numRan].classList.remove("apple");
+        gridList[apple].classList.remove("apple");
         snake.body.push(snake.direction);
          
-        numRan = Math.floor(Math.random() * 900);
-        apple = numRan;
-        gridList[numRan].classList.add("apple");
+        apple = Math.floor(Math.random() * 900);
+        gridList[apple].classList.add("apple");
          
     }
 
