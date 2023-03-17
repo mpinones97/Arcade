@@ -1,0 +1,27 @@
+
+#game_box{
+    border: 5px double black;
+    width: 600px;
+    height: 600px;
+    background-color: darkgrey;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.grid_cell{
+    /* background-color: blue; */
+    width: 20px;
+    height: 20px;
+    /* border: 1px solid white; */
+    box-sizing: border-box;
+}
+
+.snake{
+    background-color: yellow;
+}
+
+.apple{
+    background-color: red;
+
+}
