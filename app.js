@@ -14,7 +14,7 @@ let apple = Math.floor(Math.random() * 900);
 function gameLayout(){
     game.innerHTML = "";
 
-    for(let i = 0; i < 900; i++){
+    for (let i = 0; i < 900; i++) {
         const gridCell = document.createElement("div");
         gridCell.classList.add("grid_cell");
         game.appendChild(gridCell);
@@ -28,45 +28,44 @@ function gameLayout(){
 
     const gridList = document.querySelectorAll("#game_box .grid_cell");
     gridList[apple].classList.add("apple");
-
-
+    
+    setInterval(update, 200);
 };
 
 function renderState() {
     const gridList = document.querySelectorAll("#game_box .grid_cell");
-    snake.body.forEach(function(index){
+    snake.body.forEach(function(index) {
         gridList[index].classList.add("snake");
     });
 };
 
-function moveSnake(){
-
+function moveSnake() {
     snake.direction = snake.body[snake.body.length-1];
     snake.direction += move;
 
     const gridList = document.querySelectorAll("#game_box .grid_cell");
     gridList[snake.body[0]].classList.remove("snake");
+
     snake.body.shift();
     snake.body.push(snake.direction);
-    
+
     renderState();
 };
 
-function growSnake(){
-    if(snake.body[snake.body.length-1] == apple){
+function growSnake() {
+    if (snake.body[snake.body.length-1] == apple) {
         snake.direction = apple;
         snake.direction += move;
     
         const gridList = document.querySelectorAll("#game_box .grid_cell");
         gridList[snake.body[snake.body.length-1]].classList.add("snake");
         gridList[apple].classList.remove("apple");
+
         snake.body.push(snake.direction);
          
         apple = Math.floor(Math.random() * 900);
         gridList[apple].classList.add("apple");
-         
-    }
-
+    };
 };
 
 function update() {
@@ -76,22 +75,21 @@ function update() {
 };
 
 
-document.getElementById("start_game").addEventListener('click', function(){
+document.getElementById("start_game").addEventListener('click', function() {
     gameLayout();
-    setInterval(update, 200);
 });
 
-document.addEventListener('keydown', function (event){
-    if (event.code == 'ArrowRight'){
+document.addEventListener('keydown', function (event) {
+    if (event.code == 'ArrowRight') {
         move = 1;
    }
-   else if (event.code == 'ArrowLeft'){
+   else if (event.code == 'ArrowLeft') {
         move = -1;          
    }
-    else if (event.code == 'ArrowUp'){
+    else if (event.code == 'ArrowUp') {
         move = -30;
    }
-    else if (event.code == 'ArrowDown'){
+    else if (event.code == 'ArrowDown') {
         move = 30;
    };
 });
