@@ -36,7 +36,7 @@ function moveSnake() {
     snake.direction = snake.body[snake.body.length-1];
     snake.direction += move;
 
-    if (snake.direction < 0) {
+    if (snake.direction < 0 || snake.direction > 899) {
         endGame();
     };
 
