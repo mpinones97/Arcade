@@ -1,13 +1,15 @@
 // have the game end if the snake tries to eat itself
-// have the game end if the snake runs into a wall
-// see how long my snake was when the game ended
+// + have the game end if the snake runs into a wall
 // start the game over without having to reset the browser
 
 let state;
 let snake;
-let move = 0;
-const game = document.getElementById("game_box");
+let move = 1;
 let apple = Math.floor(Math.random() * 900);
+
+const game = document.getElementById('game_box');
+const scoreDiv = document.getElementById('score');
+const startGame = document.getElementById('start_game');
 
 function gameLayout(){
     game.innerHTML = '';
@@ -30,18 +32,13 @@ function gameLayout(){
     setInterval(update, 200);
 };
 
-function renderState() {
-    const gridList = document.querySelectorAll('#game_box .grid_cell');
-    snake.body.forEach(function(index) {
-        gridList[index].classList.add('snake');
-    });
-};
-
 function moveSnake() {
     snake.direction = snake.body[snake.body.length-1];
     snake.direction += move;
 
-    //if move is overbond end game
+    if (snake.direction < 0) {
+        endGame();
+    };
 
     const gridList = document.querySelectorAll('#game_box .grid_cell');
     gridList[snake.body[0]].classList.remove('snake');
@@ -52,6 +49,24 @@ function moveSnake() {
     renderState();
 };
 
+function renderState() {
+    const gridList = document.querySelectorAll('#game_box .grid_cell');
+    snake.body.forEach(function(index) {
+        gridList[index].classList.add('snake');
+    });
+};
+
+function getApplePo(){
+    let position = Math.floor(Math.random() * 900);
+
+    snake.body.forEach(function(index) {
+        if (index == position){
+            getApplePo();
+        };
+    });
+
+    return position;
+};
 
 function growSnake() {
     if (snake.body[snake.body.length-1] == apple) {
@@ -64,28 +79,16 @@ function growSnake() {
 
         snake.body.push(snake.direction);
          
-        apple = Math.floor(Math.random() * 900);
-        //apple = getApplePo();
+        apple = getApplePo();
         gridList[apple].classList.add('apple');
     };
 };
 
 function score(){
     if (snake.body.length > 2){
-        document.getElementById("score").innerText = "SOCRE: " + (snake.body.length-2);
+        scoreDiv.innerText = "SCORE: " + (snake.body.length - 2);
     };
 };
-
-// function getApplePo(){
-//     let position = Math.floor(Math.random() * 900);
-//     //check if this in inside snake
-
-//     //if not return position
-        
-//     //if so return getApplePo()
-
-// };
-
 
 function update() {
     renderState();
@@ -94,10 +97,16 @@ function update() {
     score();
 };
 
-
-document.getElementById('start_game').addEventListener('click', function() {
+startGame.addEventListener('click', function() {
+    document.getElementById('buttons').removeChild(startGame);
     gameLayout();
 });
+
+function endGame(){
+    scoreDiv.innerText = "Game Over!! Your score is " + (snake.body.length-2);
+    document.body.removeChild(game);
+    document.getElementById('buttons').appendChild(startGame);
+}
 
 document.addEventListener('keydown', function (event) {
     if (event.code == 'ArrowRight') {
