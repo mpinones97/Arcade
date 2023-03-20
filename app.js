@@ -1,15 +1,14 @@
-// have the game end if the snake tries to eat itself
-// + have the game end if the snake runs into a wall
-// start the game over without having to reset the browser
-
-let state;
 let snake;
 let move = 1;
+let width = 30;
 let apple = Math.floor(Math.random() * 900);
+let isRunning;
 
 const game = document.getElementById('game_box');
 const scoreDiv = document.getElementById('score');
 const startGame = document.getElementById('start_game');
+const playAgain = document.getElementById('play_again');
+document.getElementById('buttons').removeChild(playAgain);
 
 function gameLayout(){
     game.innerHTML = '';
@@ -32,28 +31,42 @@ function gameLayout(){
     setInterval(update, 200);
 };
 
-function moveSnake() {
-    snake.direction = snake.body[snake.body.length-1];
-    snake.direction += move;
-
-    if (snake.direction < 0 || snake.direction > 899) {
-        endGame();
-    };
-
-    const gridList = document.querySelectorAll('#game_box .grid_cell');
-    gridList[snake.body[0]].classList.remove('snake');
-
-    snake.body.shift();
-    snake.body.push(snake.direction);
-
-    renderState();
-};
-
 function renderState() {
     const gridList = document.querySelectorAll('#game_box .grid_cell');
     snake.body.forEach(function(index) {
         gridList[index].classList.add('snake');
     });
+};
+
+function moveSnake() {
+    snake.direction = snake.body[snake.body.length-1];
+    snake.direction += move;
+
+    if (snake.direction < 0 || snake.direction >= 900 ||
+        (snake.direction % 30 === 0 && move === -1) ||
+        (snake.direction % 30 === 29 && move === 1)) {
+      endGame();
+      return;
+    };
+
+    const gridList = document.querySelectorAll('#game_box .grid_cell');
+    gridList[snake.body[0]].classList.remove('snake');
+
+    for (let i = 1; i < snake.body.length; i++){
+        if (move == (snake.direction - move)){
+            snake.direction = snake.body[snake.body.length-1];
+            move = 1
+            moveSnake();
+        }
+        else if(snake.direction == snake.body[i]){
+            endGame();
+        };
+    };
+
+    snake.body.shift();
+    snake.body.push(snake.direction);
+
+    renderState();
 };
 
 function getApplePo(){
@@ -91,21 +104,29 @@ function score(){
 };
 
 function update() {
-    renderState();
-    moveSnake();
-    growSnake();
-    score();
+    if (isRunning){
+        renderState();
+        moveSnake();
+        growSnake();
+        score();
+    };
 };
 
 startGame.addEventListener('click', function() {
     document.getElementById('buttons').removeChild(startGame);
+    document.getElementById('buttons').appendChild(playAgain);
+    isRunning = true;
     gameLayout();
 });
+
+playAgain.addEventListener('click', function(){
+    location.reload();
+})
 
 function endGame(){
     scoreDiv.innerText = "Game Over!! Your score is " + (snake.body.length-2);
     document.body.removeChild(game);
-    document.getElementById('buttons').appendChild(startGame);
+    isRunning = false;
 }
 
 document.addEventListener('keydown', function (event) {
@@ -122,3 +143,4 @@ document.addEventListener('keydown', function (event) {
         move = 30;
     };
 });
+
