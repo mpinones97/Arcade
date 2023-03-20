@@ -1,26 +1,41 @@
+*{
+    font-family: 'Poppins', sans-serif;
+}
+
+#title{
+    font-size: 30px;
+}
 
 #game_box{
     border: 5px double black;
     width: 600px;
     height: 600px;
-    background-color: darkgrey;
+    background-color: rgb(5, 44, 5);
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
 }
 
+#score{
+    font-size: 20px;
+}
+
+#end_game{
+    font-size: 40px;
+}
+
 .grid_cell{
-    /* background-color: blue; */
     width: 20px;
     height: 20px;
-    /* border: 1px solid white; */
     box-sizing: border-box;
 }
 
 .snake{
-    background-color: yellow;
+    background-color: DarkTurquoise;
+    border-radius: 25%;
 }
 
 .apple{
     background-color: red;
+    border-radius: 50%;
 }

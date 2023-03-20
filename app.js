@@ -5,7 +5,9 @@ let apple = Math.floor(Math.random() * 900);
 let isRunning;
 
 const game = document.getElementById('game_box');
-const scoreDiv = document.getElementById('score');
+const scoreDiv  = document.getElementById('score');
+const gameOver  = document.getElementById('end_game');
+const rules     = document.getElementById('rules');
 const startGame = document.getElementById('start_game');
 const playAgain = document.getElementById('play_again');
 document.getElementById('buttons').removeChild(playAgain);
@@ -36,6 +38,8 @@ function renderState() {
     snake.body.forEach(function(index) {
         gridList[index].classList.add('snake');
     });
+
+    gridList[snake.body[snake.body.length-1]].innerText = '👀';
 };
 
 function moveSnake() {
@@ -51,11 +55,12 @@ function moveSnake() {
 
     const gridList = document.querySelectorAll('#game_box .grid_cell');
     gridList[snake.body[0]].classList.remove('snake');
+    gridList[snake.body[snake.body.length-1]].innerText = '';
 
     for (let i = 1; i < snake.body.length; i++){
         if (move == (snake.direction - move)){
             snake.direction = snake.body[snake.body.length-1];
-            move = 1
+            move = 1;
             moveSnake();
         }
         else if(snake.direction == snake.body[i]){
@@ -65,6 +70,8 @@ function moveSnake() {
 
     snake.body.shift();
     snake.body.push(snake.direction);
+
+    gridList[snake.body[snake.body.length-1]].innerText = '👀';
 
     renderState();
 };
@@ -87,6 +94,7 @@ function growSnake() {
         snake.direction += move;
     
         const gridList = document.querySelectorAll('#game_box .grid_cell');
+        gridList[snake.body[snake.body.length-1]].innerText = '';
         gridList[snake.body[snake.body.length-1]].classList.add('snake');
         gridList[apple].classList.remove('apple');
 
@@ -111,6 +119,14 @@ function update() {
         score();
     };
 };
+function endGame(){
+    document.body.removeChild(game);
+    document.body.removeChild(scoreDiv);
+    document.body.removeChild(rules);
+    gameOver.innerText = "!!GAME OVER!! Your score was " + (snake.body.length - 2);
+
+    isRunning = false;
+};
 
 startGame.addEventListener('click', function() {
     document.getElementById('buttons').removeChild(startGame);
@@ -121,13 +137,7 @@ startGame.addEventListener('click', function() {
 
 playAgain.addEventListener('click', function(){
     location.reload();
-})
-
-function endGame(){
-    scoreDiv.innerText = "Game Over!! Your score is " + (snake.body.length-2);
-    document.body.removeChild(game);
-    isRunning = false;
-}
+});
 
 document.addEventListener('keydown', function (event) {
     if (event.code == 'ArrowRight') {
